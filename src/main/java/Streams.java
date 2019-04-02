@@ -17,16 +17,21 @@ public class Streams<T> {
 
     }
 
+    private boolean isOptimize=true;
+    private boolean flagFinal = false;
     private List<operation> listOperations = new ArrayList<>();
     private List<T> objectList = new ArrayList<>();
     private final List<T> ofList;
-    private boolean flagFinal = false;
 
+    public void setOptimize(boolean flag){
+        isOptimize=flag;
+    }
     /**
      * Другой вариант remove делать, что быстрее не знаю
      *
      * @param predicate
      */
+
     private void realFilter(Predicate<T> predicate) {
         List<T> curList = new ArrayList<>();
         for (T obj : objectList) {
@@ -148,7 +153,7 @@ public class Streams<T> {
         if (flagFinal) throw new IllegalAccessException();
         flagFinal = true;
         copyList();
-        optimize();
+       if(isOptimize) optimize();
         performIntermidiantOperation();
         Map<K, V> resultMap = new HashMap<>();
         for (T obj : objectList) {
@@ -156,5 +161,12 @@ public class Streams<T> {
         }
         return resultMap;
     }
-
+    public List<T> toList() throws IllegalAccessException {
+        if (flagFinal) throw new IllegalAccessException();
+        flagFinal = true;
+        copyList();
+        if(isOptimize) optimize();
+        performIntermidiantOperation();
+        return objectList;
+    }
 }
